@@ -40,6 +40,6 @@ and open the link in the output (which may differ from the example) in the inter
 
 ## Try it now
 
-You can try using the app by following this link:  
+You can try using the app now by following this link:  
 https://vitkl.shinyapps.io/gene_expression_simulator/  
-However, there is a limitation: app will work only for 25 hours per month for all users (RStudio free subscription limit). 
+However, there is a limitation: app will work only for 25 hours per month for all users (RStudio free subscription limit). App is also likely to work faster on your machine.   

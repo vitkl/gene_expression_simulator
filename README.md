@@ -1,14 +1,16 @@
 # Hi, I am a gene expression simulator! 
 
-I simulate gene expression   
+### I simulate gene expression   
 - in 2 sample groups,   
 - of 2 gene modules,   
 - and can include batch effect    
 
-I show you a heatmap plot that groups genes and samples by distance silimarity. You can download simulated data as .RData file.  
+### I show you a heatmap plot that groups genes and samples by distance silimarity. You can download simulated data as .RData file.  
 
-Option details:  
+## Option details:  
 ...coming soon...  
+
+## How to use 
 
 To use this R shiny app, first, you need to save this repository (either clone or download zip file) to your computer. If you download zip file, unzip it.   
 
@@ -31,7 +33,7 @@ If you want to use both R console and the app you can type this into the Termina
 ```SHELL
 R -e "shiny::runApp('~/_path_to_app_/gene_expression_simulation/')"
 ```
-and open the link in output (may differ from the example) in the internet browser:  
+and open the link in the output (which may differ from the example) in the internet browser:  
 ```
 > Listening on http://127.0.0.1:7630
 ```

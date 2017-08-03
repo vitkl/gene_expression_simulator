@@ -37,3 +37,9 @@ and open the link in the output (which may differ from the example) in the inter
 ```
 > Listening on http://127.0.0.1:7630
 ```
+
+## Try it now
+
+You can try using the app by following this link:  
+https://vitkl.shinyapps.io/gene_expression_simulator/  
+However, there is a limitation: app will work only for 25 hours per month for all users (RStudio free subscription limit). 

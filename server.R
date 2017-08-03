@@ -45,4 +45,4 @@ shinyServer(function(input, output, session) {
 
 })
 
-# R -e "shiny::runApp('~/Desktop/gene_expression_simulation/')" #http://rstudio.github.io/shiny/tutorial/#run-and-debug
+# R -e "shiny::runApp('~/Desktop/gene_expression_simulator/')" #http://rstudio.github.io/shiny/tutorial/#run-and-debug

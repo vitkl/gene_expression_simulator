@@ -2,10 +2,10 @@ library(shiny)
 
 # Define UI for application that simulates gene expression and plots heatmap
 shinyUI(pageWithSidebar(
-
+  
   # Application title
   headerPanel("gene expression simulator: 2 sample groups, 2 gene modules, batch effect"),
-
+  
   # Sidebar with a slider input for number of observations
   sidebarPanel(
     sliderInput("average_difference",
@@ -28,17 +28,30 @@ shinyUI(pageWithSidebar(
                 "number of genes within module 2",
                 min = 1, max = 300,
                 value = 45),
-
+    
     sliderInput("seed",
                 "set.seed(): reproducible random number generation",
                 min = 1, max = 100,
                 value = 0.5, step = 1)
   ),
-
+  
   # Show a plot of the generated distribution
   mainPanel(
-    plotOutput("heatmap", height = "auto"),
-
+    # plot heatmap
+    tabsetPanel(
+      tabPanel(title = "heatmap",
+               column(width = 2, "_" ,offset = 0), # make some space above the plot
+               plotOutput("heatmap", height = "auto")
+      ),
+      tabPanel(title = "p-value distribution",
+               column(width = 2, "_" ,offset = 0) # make some space above the plot
+               
+      ),
+      tabPanel(title = "gene module boxplots",
+               column(width = 2, "_" ,offset = 0) # make some space above the plot
+      )
+    ),
+    
     fluidRow(
       column(width = 2, offset = 0.2,
              radioButtons(inputId = "batch", label = "Model batch effects?",
@@ -59,7 +72,7 @@ shinyUI(pageWithSidebar(
                           value = 300)),
       column(width = 5, offset = 0.2,
              conditionalPanel(condition = "input.batch == \"TRUE\"",
-
+                              
                               sliderInput(inputId = "batch_size",
                                           label = "batch size",
                                           min = 1, max = 30, step = 1,
@@ -74,6 +87,6 @@ shinyUI(pageWithSidebar(
                                           value = 0.5, width = "100%"))
       )
     )
-
+    
   )
 ))

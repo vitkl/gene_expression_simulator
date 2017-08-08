@@ -66,10 +66,10 @@ shinyUI(pageWithSidebar(
                       conditionalPanel(condition = "input.boxplot == \"modules\"",
                                        radioButtons(inputId = "show_only_genes_in_modules", label = "show only genes in modules?",
                                                     choices = list(yes = TRUE, no = FALSE), selected = TRUE)),
-                      conditionalPanel(condition = "input.boxplot != \"modules\"",
-                                       textInput(inputId = "module_names", label = "enter custom module names separated by \",\"", value = "NA")),
-                      conditionalPanel(condition = "input.boxplot != \"samples\"",
-                                       textInput(inputId = "sample_names", label = "enter custom sample group names separated by \",\"", value = "NA"))
+                      conditionalPanel(condition = "input.boxplot == \"samples\"",
+                                       textInput(inputId = "module_names", label = "enter custom module names separated by \",\" or NA", value = "NA")),
+                      conditionalPanel(condition = "input.boxplot == \"modules\"",
+                                       textInput(inputId = "sample_names", label = "enter custom sample group names separated by \",\" or NA", value = "NA"))
                ),
                conditionalPanel(condition = "input.boxplot != \"FALSE\"",
                                 plotOutput("boxplot", height = "auto"))

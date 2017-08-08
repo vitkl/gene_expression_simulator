@@ -74,15 +74,23 @@ plotBoxplot = function(random_gene_expression, genes_or_samples = F, add_group3 
                              levels = 1:nrow(gene_expression)))
   
   if(!(module_names[1] == "NA")){
-    dat[modules == "#FFB57D", modules := if(1 <= length(module_names)) module_names[1] else "#FFB57D"]
-    dat[modules == "#B0E2DF", modules := if(2 <= length(module_names)) module_names[2] else "#B0E2DF"]
-    dat[modules == "gray27", modules := if(3 <= length(module_names)) module_names[3] else "gray27"]
+    module_names[1] = if(1 <= length(module_names)) module_names[1] else "#FFB57D"
+    module_names[2] = if(2 <= length(module_names)) module_names[2] else "#B0E2DF"
+    module_names[3] = if(3 <= length(module_names)) module_names[3] else "gray27"
+    dat[modules == "#FFB57D", modules := module_names[1]]
+    dat[modules == "#B0E2DF", modules := module_names[2]]
+    dat[modules == "gray27", modules := module_names[3]]
+    dat[, modules := factor(modules, levels = module_names)]
   }
   
   if(!(sample_names[1] == "NA")){
-    dat[samples == "#FF8000", samples := if(1 <= length(sample_names)) sample_names[1] else "#FF8000"]
-    dat[samples == "#35AFA9", samples := if(2 <= length(sample_names)) sample_names[2] else "#35AFA9"]
-    dat[samples == "gray27", samples := if(3 <= length(sample_names)) sample_names[3] else "gray27"]
+    sample_names[1] = if(1 <= length(sample_names)) sample_names[1] else "#FF8000"
+    sample_names[2] = if(2 <= length(sample_names)) sample_names[2] else "#35AFA9"
+    sample_names[3] = if(3 <= length(sample_names)) sample_names[3] else "gray27"
+    dat[samples == "#FF8000", samples := sample_names[1]]
+    dat[samples == "#35AFA9", samples := sample_names[2]]
+    dat[samples == "gray27", samples := sample_names[3]]
+    dat[, samples := factor(samples, levels = sample_names)]
   }
   
   if(!genes_or_samples){
@@ -98,7 +106,7 @@ plotBoxplot = function(random_gene_expression, genes_or_samples = F, add_group3 
   
   if(genes_or_samples){
   # generate plot: average across samples per gene (labelled by modules
-  if(show_only_genes_in_modules) dat = dat[modules != "gray27",]
+  if(show_only_genes_in_modules) dat = dat[modules != "gray27" | modules != module_names[3],]
   plot = ggplot(aes(x = genes, y = value, color = modules), data = dat) +
     geom_boxplot(outlier.size =0) +
     facet_grid(samples ~ .) +

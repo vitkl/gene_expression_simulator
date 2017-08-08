@@ -3,10 +3,11 @@ library(shiny)
 # Define server logic required to simulate gene expression and plot heatmap
 shinyServer(function(input, output, session) {
   # identify missing packages
-  packages = c("gplots")
+  packages = c("gplots", "ggplot2", "grid", "data.table")
   missing_packages = packages[!packages %in% names(installed.packages()[,"Package"])]
   if(length(missing_packages) > 0) stop(paste0("required packages are missing: ", paste(missing_packages, collapse = " ")))
   
+  library(ggplot2, data.table)
   source("gene_expression_simulation.R")
   
   observe({
@@ -36,10 +37,13 @@ shinyServer(function(input, output, session) {
                       )
   })
   
+  # plot heatmap
   output$heatmap <- renderPlot({
+    ##########    ##########    ##########    ##########    ##########
     batch = as.logical(input$batch)
     to_return = as.logical(input$to_return)
     substract_mean = as.logical(input$substract_mean)
+    add_group3 = as.logical(input$add_group3)
     if(batch) batch_size = input$batch_size
     if(!batch) batch_size = NULL
     # generate gene expression data
@@ -47,18 +51,55 @@ shinyServer(function(input, output, session) {
                                                    input$genes, input$noise,
                                                    input$average_difference, input$noise_difference,
                                                    input$module1_size, input$module2_size,
-                                                   batch_size, input$batch_average_difference, input$group1_in_batch, input$seed, to_return, substract_mean)
+                                                   batch_size, input$batch_average_difference, input$group1_in_batch, 
+                                                   input$seed, to_return, substract_mean, 
+                                                   add_group3, input$group3_size)
+    ##########    ##########    ##########    ##########    ##########
     
     plotHeatmap2(random_gene_expression, seed = input$seed)
     
+    # enable downloading random gene expression data
     output$downloadData <- downloadHandler(
       filename = "random_gene_expression.RData",
       content = function(file) {
         save(random_gene_expression, file = file)
       }
     )
+    
   }, height = function() {
     session$clientData$output_heatmap_width/1.25})
+  
+  # plot boxplot
+  output$boxplot <- renderPlot({
+    ##########    ##########    ##########    ##########    ##########
+    batch = as.logical(input$batch)
+    to_return = as.logical(input$to_return)
+    substract_mean = as.logical(input$substract_mean)
+    add_group3 = as.logical(input$add_group3)
+    show_only_genes_in_modules = as.logical(input$show_only_genes_in_modules)
+    if(batch) batch_size = input$batch_size
+    if(!batch) batch_size = NULL
+    # generate gene expression data
+    random_gene_expression = sampleGeneExpression2(input$group1_size, input$group2_size,
+                                                   input$genes, input$noise,
+                                                   input$average_difference, input$noise_difference,
+                                                   input$module1_size, input$module2_size,
+                                                   batch_size, input$batch_average_difference, input$group1_in_batch, 
+                                                   input$seed, to_return, substract_mean, 
+                                                   add_group3, input$group3_size)
+    ##########    ##########    ##########    ##########    ##########
+    
+    module_names = unlist(strsplit(input$module_names, ","))
+    sample_names = unlist(strsplit(input$sample_names, ","))
+    
+    plotBoxplot(random_gene_expression, 
+                genes_or_samples = if(input$boxplot == "modules") TRUE else FALSE, 
+                add_group3, 
+                show_only_genes_in_modules,
+                module_names,
+                sample_names)
+    }, height = function() {
+      session$clientData$output_heatmap_width/1.25})
   
 })
 

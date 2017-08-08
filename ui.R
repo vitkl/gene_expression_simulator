@@ -28,7 +28,12 @@ shinyUI(pageWithSidebar(
                 "number of genes within module 2",
                 min = 1, max = 300,
                 value = 45),
-    
+    radioButtons(inputId = "add_group3", label = "add group 3 that doesn't express both modules?",
+                 choices = list(yes = TRUE, no = FALSE), selected = FALSE),
+    conditionalPanel(condition = "input.add_group3 == \"TRUE\"",
+                     numericInput(inputId = "group3_size",
+                                  label = "size of the sample group 3",
+                                  value = 15)),
     sliderInput("seed",
                 "set.seed(): reproducible random number generation",
                 min = 1, max = 100,
@@ -42,18 +47,32 @@ shinyUI(pageWithSidebar(
     # plot heatmap
     tabsetPanel(
       tabPanel(title = "heatmap",
-               #column(width = 2, "_" ,offset = 0), # make some space above the plot
                radioButtons(inputId = "heatmap", label = "plot heatmap?",
                             choices = list(yes = TRUE, no = FALSE), selected = TRUE),
                conditionalPanel(condition = "input.heatmap == \"TRUE\"",
                                 plotOutput("heatmap", height = "auto"))
       ),
       tabPanel(title = "p-value distribution",
-               column(width = 2, "_" ,offset = 0) # make some space above the plot
-               
+               radioButtons(inputId = "pval_dist", label = "plot p-value distribution?",
+                            choices = list(yes = TRUE, no = FALSE), selected = FALSE),
+               conditionalPanel(condition = "input.pval_dist == \"TRUE\"",
+                                plotOutput("pval_dist", height = "auto"))
       ),
       tabPanel(title = "gene module boxplots",
-               column(width = 2, "_" ,offset = 0) # make some space above the plot
+               column(width = 5, offset = 0.2,
+                      radioButtons(inputId = "boxplot", label = "plot gene module vs sample boxplots?",
+                                   choices = list(`sample groups vs modules (per sample, average across genes)` = "samples", `modules vs sample groups (per gene, average across samples)` = "modules", none = FALSE), selected = FALSE, width = "95%")),
+               column(width = 5, offset = 0.2,
+                      conditionalPanel(condition = "input.boxplot == \"modules\"",
+                                       radioButtons(inputId = "show_only_genes_in_modules", label = "show only genes in modules?",
+                                                    choices = list(yes = TRUE, no = FALSE), selected = TRUE)),
+                      conditionalPanel(condition = "input.boxplot != \"modules\"",
+                                       textInput(inputId = "module_names", label = "enter custom module names separated by \",\"", value = "NA")),
+                      conditionalPanel(condition = "input.boxplot != \"samples\"",
+                                       textInput(inputId = "sample_names", label = "enter custom sample group names separated by \",\"", value = "NA"))
+               ),
+               conditionalPanel(condition = "input.boxplot != \"FALSE\"",
+                                plotOutput("boxplot", height = "auto"))
       )
     ),
     

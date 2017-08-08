@@ -1,5 +1,7 @@
 # Hi, I am a gene expression simulator! 
 
+current version: 1.01
+
 ### I simulate gene expression   
 - in 2 sample groups,   
 - of 2 gene modules,   

@@ -39,6 +39,7 @@ shinyServer(function(input, output, session) {
   output$heatmap <- renderPlot({
     batch = as.logical(input$batch)
     to_return = as.logical(input$to_return)
+    substract_mean = as.logical(input$substract_mean)
     if(batch) batch_size = input$batch_size
     if(!batch) batch_size = NULL
     # generate gene expression data
@@ -46,7 +47,7 @@ shinyServer(function(input, output, session) {
                                                    input$genes, input$noise,
                                                    input$average_difference, input$noise_difference,
                                                    input$module1_size, input$module2_size,
-                                                   batch_size, input$batch_average_difference, input$group1_in_batch, input$seed, to_return)
+                                                   batch_size, input$batch_average_difference, input$group1_in_batch, input$seed, to_return, substract_mean)
     
     plotHeatmap2(random_gene_expression, seed = input$seed)
     

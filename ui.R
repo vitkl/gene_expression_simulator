@@ -32,7 +32,9 @@ shinyUI(pageWithSidebar(
     sliderInput("seed",
                 "set.seed(): reproducible random number generation",
                 min = 1, max = 100,
-                value = 0.5, step = 1)
+                value = 0.5, step = 1),
+    radioButtons(inputId = "substract_mean", label = "substract mean from differentially expressed genes?",
+                 choices = list(yes = TRUE, no = FALSE), selected = FALSE)
   ),
   
   # Show a plot of the generated distribution
@@ -40,8 +42,11 @@ shinyUI(pageWithSidebar(
     # plot heatmap
     tabsetPanel(
       tabPanel(title = "heatmap",
-               column(width = 2, "_" ,offset = 0), # make some space above the plot
-               plotOutput("heatmap", height = "auto")
+               #column(width = 2, "_" ,offset = 0), # make some space above the plot
+               radioButtons(inputId = "heatmap", label = "plot heatmap?",
+                            choices = list(yes = TRUE, no = FALSE), selected = TRUE),
+               conditionalPanel(condition = "input.heatmap == \"TRUE\"",
+                                plotOutput("heatmap", height = "auto"))
       ),
       tabPanel(title = "p-value distribution",
                column(width = 2, "_" ,offset = 0) # make some space above the plot
